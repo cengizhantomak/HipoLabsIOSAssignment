@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  HipoLabsIOSAssignment
 //
-//  Created by Kerem Tuna Tomak on 15.04.2023.
+//  Created by Cengizhan Tomak on 15.04.2023.
 //
 
 import UIKit
