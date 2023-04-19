@@ -240,7 +240,7 @@
                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="btn:" destination="dUt-kS-hAT" eventType="touchUpInside" id="Qsb-gs-Wuu"/>
+                                    <action selector="sortMembersButton:" destination="dUt-kS-hAT" eventType="touchUpInside" id="PMH-Qy-N7T"/>
                                 </connections>
                             </button>
                             <searchBar contentMode="redraw" fixedFrame="YES" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="8yq-Ia-FWy">
@@ -443,7 +443,7 @@
                                 <rect key="frame" x="16" y="331" width="361" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="GitHub UserName" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Npr-wU-8IM">
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="GitHub Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Npr-wU-8IM">
                                         <rect key="frame" x="53" y="9" width="300" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>

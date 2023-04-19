@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     @IBOutlet weak var textField: UITextField!
     
     @IBOutlet weak var membersTableView: UITableView!
@@ -138,8 +138,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell
         
     }
-
-    @IBAction func btn(_ sender: Any) {
+    
+    @IBAction func sortMembersButton(_ sender: Any) {
         
 //        let user = textField.text ?? ""
 //
@@ -153,10 +153,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //            let vc = self.storyboard?.instantiateViewController(identifier: "DetailViewController") as! DetailViewController
 //            vc.user = user
 //            self.show(vc, sender: nil)
-
+//
 //        }
         
     }
+    
+//    @IBAction func addNewMemberButton(_ sender: Any) {
+//        performSegue(withIdentifier: "toAddMembersVC", sender: nil)
+//
+//    }
     
 }
 

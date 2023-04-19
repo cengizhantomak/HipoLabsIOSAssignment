@@ -55,34 +55,96 @@ class AddNewMemberViewController: UIViewController {
     
     @IBAction func backButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+        
     }
     
     @IBAction func addButton(_ sender: Any) {
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        
-        let newTeam = NSEntityDescription.insertNewObject(forEntityName: "Team", into: context)
-        let newMembers = NSEntityDescription.insertNewObject(forEntityName: "Members", into: context)
-        let newHipo = NSEntityDescription.insertNewObject(forEntityName: "Hipo", into: context)
-        
-        newTeam.setValue(teamText.text, forKey: "team")
-        newMembers.setValue(nameText.text, forKey: "name")
-        newMembers.setValue(githubText.text, forKey: "github")
-        newHipo.setValue(positionText.text, forKey: "position")
-        
-        if let years = Int(yearsText.text!) {
-            newHipo.setValue(years, forKey: "years")
+        guard let githubUser = githubText.text, !githubUser.isEmpty else {
+            showAlert(title: "Error", message: "Please Enter GitHub Username.")
+            return
+            
         }
         
-        do {
-            try context.save()
-        } catch {
-            print("error")
+        let urlString = "https://api.github.com/users/\(githubUser)"
+        
+        guard let url = URL(string: urlString) else {
+            showAlert(title: "Error", message: "Invalid URL")
+            return
+            
         }
         
-        NotificationCenter.default.post(name: NSNotification.Name("newData"), object: nil)
-        self.dismiss(animated: true, completion: nil)
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            guard let data = data, error == nil else {
+                self.showAlert(title: "Error", message: "No data received.")
+                return
+                
+            }
+            
+            do {
+                let result = try JSONDecoder().decode(MyResponse.self, from: data)
+                
+                if result.login.lowercased() == githubUser.lowercased() {
+                    DispatchQueue.main.async {
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        let context = appDelegate.persistentContainer.viewContext
+                        
+                        let newTeam = NSEntityDescription.insertNewObject(forEntityName: "Team", into: context)
+                        let newMembers = NSEntityDescription.insertNewObject(forEntityName: "Members", into: context)
+                        let newHipo = NSEntityDescription.insertNewObject(forEntityName: "Hipo", into: context)
+                        
+                        newTeam.setValue(self.teamText.text, forKey: "team")
+                        newMembers.setValue(self.nameText.text, forKey: "name")
+                        newMembers.setValue(self.githubText.text, forKey: "github")
+                        newHipo.setValue(self.positionText.text, forKey: "position")
+                        
+                        if let years = Int(self.yearsText.text!) {
+                            newHipo.setValue(years, forKey: "years")
+                            
+                        }
+                        
+                        do {
+                            try context.save()
+                            
+                        } catch {
+                            print("error")
+                        }
+                        
+                        NotificationCenter.default.post(name: NSNotification.Name("newData"), object: nil)
+                        self.dismiss(animated: true, completion: nil)
+                        
+                    }
+                    
+                } else {
+                    DispatchQueue.main.async {
+                        self.showAlert(title: "Error", message: "Username does not match.")
+                        
+                    }
+                }
+                
+            } catch {
+                DispatchQueue.main.async {
+                    self.showAlert(title: "Error", message: "Username not found.")
+                }
+            }
+        }
+        
+        task.resume()
+        
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+            
+        }
+    }
+    
+    struct MyResponse: Codable {
+        let login: String
         
     }
     
