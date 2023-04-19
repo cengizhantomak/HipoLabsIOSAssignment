@@ -14,6 +14,7 @@
 		47F8501C29EAF5BA000934D9 /* HipoLabsIOSAssignment.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 47F8501A29EAF5BA000934D9 /* HipoLabsIOSAssignment.xcdatamodeld */; };
 		47F8501E29EAF5BB000934D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47F8501D29EAF5BB000934D9 /* Assets.xcassets */; };
 		47F8502129EAF5BB000934D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47F8501F29EAF5BB000934D9 /* LaunchScreen.storyboard */; };
+		47F8502929EAF64D000934D9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F8502829EAF64D000934D9 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		47F8501D29EAF5BB000934D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		47F8502029EAF5BB000934D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		47F8502229EAF5BB000934D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		47F8502829EAF64D000934D9 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				47F8501F29EAF5BB000934D9 /* LaunchScreen.storyboard */,
 				47F8502229EAF5BB000934D9 /* Info.plist */,
 				47F8501A29EAF5BA000934D9 /* HipoLabsIOSAssignment.xcdatamodeld */,
+				47F8502829EAF64D000934D9 /* DetailViewController.swift */,
 			);
 			path = HipoLabsIOSAssignment;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 			files = (
 				47F8501C29EAF5BA000934D9 /* HipoLabsIOSAssignment.xcdatamodeld in Sources */,
 				47F8501629EAF5BA000934D9 /* ViewController.swift in Sources */,
+				47F8502929EAF64D000934D9 /* DetailViewController.swift in Sources */,
 				47F8501229EAF5BA000934D9 /* AppDelegate.swift in Sources */,
 				47F8501429EAF5BA000934D9 /* SceneDelegate.swift in Sources */,
 			);
