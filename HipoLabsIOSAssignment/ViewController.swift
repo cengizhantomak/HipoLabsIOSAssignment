@@ -20,6 +20,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var yearsArray = [Int]()
     var githubArray = [String]()
     
+    var user = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -139,29 +141,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
     }
     
-    @IBAction func sortMembersButton(_ sender: Any) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-//        let user = textField.text ?? ""
-//
-//        if user.isEmpty {
-//            let alert = UIAlertController(title: "UYARI", message: "Lütfen isim giriniz", preferredStyle: .alert)
-//            let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-//            alert.addAction(cancelButton)
-//            self.present(alert, animated: true, completion: nil)
-//
-//        } else {
-//            let vc = self.storyboard?.instantiateViewController(identifier: "DetailViewController") as! DetailViewController
-//            vc.user = user
-//            self.show(vc, sender: nil)
-//
-//        }
+        if segue.identifier == "toSecondVC" {
+            let destinationVC = segue.destination as! DetailViewController
+            destinationVC.user = user
+            
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        user = githubArray[indexPath.row]
+        print("11111111: \(user)")
+        performSegue(withIdentifier: "toSecondVC", sender: nil)
         
     }
     
-//    @IBAction func addNewMemberButton(_ sender: Any) {
-//        performSegue(withIdentifier: "toAddMembersVC", sender: nil)
-//
-//    }
+    @IBAction func sortMembersButton(_ sender: Any) {
+        
+    }
+    
+    //    @IBAction func addNewMemberButton(_ sender: Any) {
+    //        performSegue(withIdentifier: "toAddMembersVC", sender: nil)
+    //
+    //    }
     
 }
 
