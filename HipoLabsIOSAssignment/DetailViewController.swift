@@ -39,7 +39,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Charter-Bold", size: 16)!]
     }
     
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return repoNames.count
     }
@@ -71,14 +70,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.view.layer.borderColor = UIColor(red: 232/255, green: 232/255, blue: 235/255, alpha: 0.5).cgColor
         
         return cell
-        
     }
-    
     
     func repo(name: String, completed: @escaping () -> ()) {
         
         if let url = URL(string: "https://api.github.com/users/\(name)/repos") {
-            
             let request = URLRequest(url: url)
             let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
                 if error == nil {
@@ -99,21 +95,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-
     func github(name: String) {
         
         if let url = URL(string: "https://api.github.com/users/\(name)") {
-            
             let request = URLRequest(url: url)
             let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
                 if error == nil {
-                    
                     if let incomingData = data {
-                        
                         do {
                             let json = try JSONSerialization.jsonObject(with: incomingData, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-                            
-                            //print(json)
                             
                             let resim = json["avatar_url"] as! String
                             if let url = URL(string: resim) {
@@ -152,7 +142,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         }catch {
                             print("hata oluştu")
                         }
-                        
                     }
                 }
             }
