@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		47878C7329F1A40500546E3C /* hipo.json in Resources */ = {isa = PBXBuildFile; fileRef = 47878C7229F1A40500546E3C /* hipo.json */; };
 		47C56CDF29F0285B0053B0C1 /* RepoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56CDE29F0285B0053B0C1 /* RepoTableViewCell.swift */; };
 		47C56CE129F030700053B0C1 /* RepoDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56CE029F030700053B0C1 /* RepoDetail.swift */; };
 		47C56CE329F043A30053B0C1 /* AddNewMemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56CE229F043A30053B0C1 /* AddNewMemberViewController.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		47878C7229F1A40500546E3C /* hipo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = hipo.json; sourceTree = "<group>"; };
 		47C56CDE29F0285B0053B0C1 /* RepoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoTableViewCell.swift; sourceTree = "<group>"; };
 		47C56CE029F030700053B0C1 /* RepoDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoDetail.swift; sourceTree = "<group>"; };
 		47C56CE229F043A30053B0C1 /* AddNewMemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewMemberViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				47C56CE029F030700053B0C1 /* RepoDetail.swift */,
 				47C56CE229F043A30053B0C1 /* AddNewMemberViewController.swift */,
 				47C56CE429F0796D0053B0C1 /* MembersTableViewCell.swift */,
+				47878C7229F1A40500546E3C /* hipo.json */,
 			);
 			path = HipoLabsIOSAssignment;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				47F8502129EAF5BB000934D9 /* LaunchScreen.storyboard in Resources */,
+				47878C7329F1A40500546E3C /* hipo.json in Resources */,
 				47F8501E29EAF5BB000934D9 /* Assets.xcassets in Resources */,
 				47F8501929EAF5BA000934D9 /* Main.storyboard in Resources */,
 			);

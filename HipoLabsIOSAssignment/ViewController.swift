@@ -14,7 +14,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var nameArray = [String]()
     var positionArray = [String]()
-    var teamArray = [String]()
     var yearsArray = [Int]()
     var githubArray = [String]()
     
@@ -30,6 +29,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         membersTableView.showsVerticalScrollIndicator = false
         
         getData()
+        
+        jsonToCoreData()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,31 +42,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         nameArray.removeAll(keepingCapacity: false)
         positionArray.removeAll(keepingCapacity: false)
-        teamArray.removeAll(keepingCapacity: false)
         yearsArray.removeAll(keepingCapacity: false)
         githubArray.removeAll(keepingCapacity: false)
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext //10)
         
-        let fetchRequestTeam = NSFetchRequest<NSFetchRequestResult>(entityName: "Team")
         let fetchRequestMembers = NSFetchRequest<NSFetchRequestResult>(entityName: "Members")
         let fetchRequestHipo = NSFetchRequest<NSFetchRequestResult>(entityName: "Hipo")
         
-        fetchRequestTeam.returnsObjectsAsFaults = false
         fetchRequestMembers.returnsObjectsAsFaults = false
         fetchRequestHipo.returnsObjectsAsFaults = false
         
         do {
-            let resultsTeam = try context.fetch(fetchRequestTeam)
-            for result in resultsTeam as! [NSManagedObject] {
-                if let team = result.value(forKey: "team") as? String {
-                    self.teamArray.append(team)
-                }
-                
-                self.membersTableView.reloadData()
-            }
-            
             let resultsMembers = try context.fetch(fetchRequestMembers)
             for result in resultsMembers as! [NSManagedObject] {
                 if let name = result.value(forKey: "name") as? String {
@@ -96,6 +86,64 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
+    func jsonToCoreData() {
+        
+        guard let fileUrl = Bundle.main.url(forResource: "hipo", withExtension: "json"),
+              let data = try? Data(contentsOf: fileUrl) else {
+            return
+        }
+        
+        let json = try? JSONSerialization.jsonObject(with: data, options: [])
+        
+        guard let dictionary = json as? [String: Any],
+              let members = dictionary["members"] as? [[String: Any]],
+              let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest: NSFetchRequest<Members> = Members.fetchRequest()
+        
+        do {
+            let memberData = try managedContext.fetch(fetchRequest)
+            
+            if memberData.count == 0 {
+                
+                for member in members {
+                    guard let name = member["name"] as? String,
+                          let github = member["github"] as? String,
+                          let hipo = member["hipo"] as? [String: Any],
+                          let position = hipo["position"] as? String,
+                          let yearsInHipo = hipo["years_in_hipo"] as? Int
+                            
+                    else {
+                        continue
+                    }
+                    
+                    let teamMember = Members(context: managedContext)
+                    teamMember.name = name
+                    teamMember.github = github
+                    
+                    let teamHipo = Hipo(context: managedContext)
+                    teamHipo.position = position
+                    teamHipo.years = Int32(yearsInHipo)
+                }
+                
+                do {
+                    try managedContext.save()
+                    
+                } catch {
+                    print("Error saving context: \(error)")
+                }
+            }
+            
+        } catch {
+            print("Error fetching results: \(error)")
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return nameArray.count
     }
@@ -104,15 +152,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let cell = membersTableView.dequeueReusableCell(withIdentifier: "memberCell") as! MembersTableViewCell
         
-        let team = teamArray[indexPath.row]
         let name = nameArray[indexPath.row]
         let position = positionArray[indexPath.row]
         let years = yearsArray[indexPath.row]
         
-        cell.teamLabel.text = team
         cell.nameLabel.text = name
-        cell.positionLabel.text = position
-        cell.yearsLabel.text = String(years)
+        cell.positionLabel.text = ("\(position)")
+        cell.yearsLabel.text = String((",  \(years) years"))
         
         cell.view.layer.cornerRadius = 8
         cell.view.layer.borderWidth = 1
@@ -139,9 +185,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let context = appDelegate.persistentContainer.viewContext
             
-            let fetchRequestTeam = NSFetchRequest<NSFetchRequestResult>(entityName: "Team")
-            fetchRequestTeam.returnsObjectsAsFaults = false
-            
             let fetchRequestMembers = NSFetchRequest<NSFetchRequestResult>(entityName: "Members")
             fetchRequestMembers.returnsObjectsAsFaults = false
             
@@ -149,16 +192,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             fetchRequestHipo.returnsObjectsAsFaults = false
             
             do {
-                let resultsTeam = try context.fetch(fetchRequestTeam) as! [NSManagedObject]
                 let resultsMembers = try context.fetch(fetchRequestMembers) as! [NSManagedObject]
                 let resultsHipo = try context.fetch(fetchRequestHipo) as! [NSManagedObject]
-                
-                if let teamToDelete = resultsTeam.first {
-                    context.delete(teamToDelete)
-                    try context.save()
-                    
-                    teamArray.remove(at: indexPath.row)
-                }
                 
                 if let memberToDelete = resultsMembers.first {
                     context.delete(memberToDelete)
