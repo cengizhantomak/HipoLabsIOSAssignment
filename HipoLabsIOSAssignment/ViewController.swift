@@ -55,15 +55,12 @@ class ViewController: UIViewController {
             let secondVC = segue.destination as! DetailViewController
             secondVC.member = memberList[index!]
         }
+        
+        if segue.identifier == "toEditVC" {
+            let toEditVC = segue.destination as! EditMemberViewController
+            toEditVC.member = memberList[index!]
+        }
     }
-    
-    
-    
-    
-    
-    
-    
-    
     
     func jsonToCoreData() {
         
@@ -196,6 +193,7 @@ class ViewController: UIViewController {
     
 }
 
+
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -220,8 +218,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.performSegue(withIdentifier: "toSecondVC", sender: indexPath.row)
     }
@@ -241,12 +237,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             self.membersTableView.reloadData()
         }
         
-        return UISwipeActionsConfiguration(actions: [deleteAction])
+        let editAction = UIContextualAction(style: .normal, title: "Edit") {  (contextualAction, view, boolValue) in
+            
+            self.performSegue(withIdentifier: "toEditVC", sender: indexPath.row)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
     
     
-    
-    
-    
 }
-

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		471F4D8029F30E4E0072DF58 /* EditMemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471F4D7F29F30E4E0072DF58 /* EditMemberViewController.swift */; };
 		47878C7329F1A40500546E3C /* hipo.json in Resources */ = {isa = PBXBuildFile; fileRef = 47878C7229F1A40500546E3C /* hipo.json */; };
 		47C56CDF29F0285B0053B0C1 /* RepoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56CDE29F0285B0053B0C1 /* RepoTableViewCell.swift */; };
 		47C56CE129F030700053B0C1 /* RepoDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C56CE029F030700053B0C1 /* RepoDetail.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		471F4D7F29F30E4E0072DF58 /* EditMemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemberViewController.swift; sourceTree = "<group>"; };
 		47878C7229F1A40500546E3C /* hipo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = hipo.json; sourceTree = "<group>"; };
 		47C56CDE29F0285B0053B0C1 /* RepoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoTableViewCell.swift; sourceTree = "<group>"; };
 		47C56CE029F030700053B0C1 /* RepoDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoDetail.swift; sourceTree = "<group>"; };
@@ -73,16 +75,17 @@
 				47F8501129EAF5BA000934D9 /* AppDelegate.swift */,
 				47F8501329EAF5BA000934D9 /* SceneDelegate.swift */,
 				47F8501529EAF5BA000934D9 /* ViewController.swift */,
+				47F8502829EAF64D000934D9 /* DetailViewController.swift */,
+				47C56CE229F043A30053B0C1 /* AddNewMemberViewController.swift */,
+				471F4D7F29F30E4E0072DF58 /* EditMemberViewController.swift */,
 				47F8501729EAF5BA000934D9 /* Main.storyboard */,
 				47F8501D29EAF5BB000934D9 /* Assets.xcassets */,
 				47F8501F29EAF5BB000934D9 /* LaunchScreen.storyboard */,
 				47F8502229EAF5BB000934D9 /* Info.plist */,
 				47F8501A29EAF5BA000934D9 /* HipoLabsIOSAssignment.xcdatamodeld */,
-				47F8502829EAF64D000934D9 /* DetailViewController.swift */,
+				47C56CE429F0796D0053B0C1 /* MembersTableViewCell.swift */,
 				47C56CDE29F0285B0053B0C1 /* RepoTableViewCell.swift */,
 				47C56CE029F030700053B0C1 /* RepoDetail.swift */,
-				47C56CE229F043A30053B0C1 /* AddNewMemberViewController.swift */,
-				47C56CE429F0796D0053B0C1 /* MembersTableViewCell.swift */,
 				47878C7229F1A40500546E3C /* hipo.json */,
 			);
 			path = HipoLabsIOSAssignment;
@@ -164,6 +167,7 @@
 				47F8501629EAF5BA000934D9 /* ViewController.swift in Sources */,
 				47C56CE329F043A30053B0C1 /* AddNewMemberViewController.swift in Sources */,
 				47C56CE529F0796D0053B0C1 /* MembersTableViewCell.swift in Sources */,
+				471F4D8029F30E4E0072DF58 /* EditMemberViewController.swift in Sources */,
 				47F8502929EAF64D000934D9 /* DetailViewController.swift in Sources */,
 				47F8501229EAF5BA000934D9 /* AppDelegate.swift in Sources */,
 				47F8501429EAF5BA000934D9 /* SceneDelegate.swift in Sources */,
