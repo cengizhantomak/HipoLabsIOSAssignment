@@ -7,15 +7,15 @@
 
 import UIKit
 
-class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+class DetailViewController: UIViewController {
+    
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var followers: UILabel!
     @IBOutlet weak var following: UILabel!
     @IBOutlet weak var repo: UILabel!
     @IBOutlet weak var repoTableView: UITableView!
     
-    var user = String()
+    var member: Members?
     
     var repoNames = [RepoDetail]()
     
@@ -24,12 +24,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         repoTableView.delegate = self
         repoTableView.dataSource = self
-
-        github(name: user)
         
-        repo(name: user) {
+        github(name: member!.github!)
+        
+        repo(name: member!.github!) {
             self.repoTableView.reloadData()
-            print(self.repoNames)
         }
         
         repoTableView.allowsSelection = false
@@ -38,6 +37,91 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Charter-Bold", size: 16)!]
     }
+    
+    func github(name: String) {
+        
+        if let url = URL(string: "https://api.github.com/users/\(name)") {
+            let request = URLRequest(url: url)
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if error == nil {
+                    if let incomingData = data {
+                        do {
+                            let json = try JSONSerialization.jsonObject(with: incomingData, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                            
+                            let resim = json["avatar_url"] as! String
+                            if let url = URL(string: resim) {
+                                DispatchQueue.global().async {
+                                    let data = try? Data(contentsOf: url)
+                                    DispatchQueue.main.async {
+                                        self.avatar.image = UIImage(data: data!)
+                                        self.avatar.layer.cornerRadius = self.avatar.bounds.width / 2
+                                        self.avatar.clipsToBounds = true
+                                        self.avatar.layer.borderWidth = 1.5
+                                        self.avatar.layer.borderColor = UIColor.white.cgColor
+                                    }
+                                }
+                            }
+                            
+                            if let userName = json["name"] as? String {
+                                DispatchQueue.main.async {
+                                    self.navigationItem.title = userName
+                                }
+                            }
+                            
+                            if let followers = json["followers"] as? Int {
+                                DispatchQueue.main.sync {
+                                    self.followers.text = String(followers)
+                                }
+                            }
+
+                            if let following = json["following"] as? Int {
+                                DispatchQueue.main.sync {
+                                    self.following.text = String(following)
+                                }
+                            }
+
+                            if let repo = json["public_repos"] as? Int {
+                                DispatchQueue.main.sync {
+                                    self.repo.text = "Repositories: \(repo)"
+                                }
+                            }
+                            
+                        }catch {
+                            print("hata oluştu")
+                        }
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    func repo(name: String, completed: @escaping () -> ()) {
+        
+        if let url = URL(string: "https://api.github.com/users/\(name)/repos") {
+            let request = URLRequest(url: url)
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if error == nil {
+                    
+                    do {
+                        self.repoNames = try JSONDecoder().decode([RepoDetail].self, from: data!)
+                        DispatchQueue.main.async {
+                            completed()
+                        }
+                        
+                    }catch {
+                        print("hata oluştu")
+                    }
+                    
+                }
+            }
+            task.resume()
+        }
+    }
+}
+
+
+extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return repoNames.count
@@ -70,83 +154,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.view.layer.borderColor = UIColor(red: 232/255, green: 232/255, blue: 235/255, alpha: 0.5).cgColor
         
         return cell
-    }
-    
-    func repo(name: String, completed: @escaping () -> ()) {
-        
-        if let url = URL(string: "https://api.github.com/users/\(name)/repos") {
-            let request = URLRequest(url: url)
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-                if error == nil {
-                    
-                    do {
-                        self.repoNames = try JSONDecoder().decode([RepoDetail].self, from: data!)
-                        DispatchQueue.main.async {
-                            completed()
-                        }
-                        
-                    }catch {
-                        print("hata oluştu")
-                    }
-                    
-                }
-            }
-            task.resume()
-        }
-    }
-    
-    func github(name: String) {
-        
-        if let url = URL(string: "https://api.github.com/users/\(name)") {
-            let request = URLRequest(url: url)
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-                if error == nil {
-                    if let incomingData = data {
-                        do {
-                            let json = try JSONSerialization.jsonObject(with: incomingData, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-                            
-                            let resim = json["avatar_url"] as! String
-                            if let url = URL(string: resim) {
-                                DispatchQueue.global().async {
-                                    let data = try? Data(contentsOf: url)
-                                    DispatchQueue.main.async {
-                                        self.avatar.image = UIImage(data: data!)
-                                        self.avatar.layer.cornerRadius = self.avatar.bounds.width / 2
-                                        self.avatar.clipsToBounds = true
-                                        self.avatar.layer.borderWidth = 1.5
-                                        self.avatar.layer.borderColor = UIColor.white.cgColor
-                                    }
-                                }
-                            }
-                            
-                            let userName = json["name"] as! String
-                            DispatchQueue.main.sync {
-                                self.navigationItem.title = String(userName)
-                            }
-                            
-                            let followers = json["followers"] as! Int
-                            DispatchQueue.main.sync {
-                                self.followers.text = String(followers)
-                            }
-
-                            let following = json["following"] as! Int
-                            DispatchQueue.main.sync {
-                                self.following.text = String(following)
-                            }
-
-                            let repo = json["public_repos"] as! Int
-                            DispatchQueue.main.sync {
-                                self.repo.text = String("Repositories: \(repo)")
-                            }
-                            
-                        }catch {
-                            print("hata oluştu")
-                        }
-                    }
-                }
-            }
-            task.resume()
-        }
     }
 
 }

@@ -22,6 +22,8 @@ class AddNewMemberViewController: UIViewController {
     
     @IBOutlet weak var addButtonOutlet: UIButton!
     
+    let context = appDelegate.persistentContainer.viewContext
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,7 +55,11 @@ class AddNewMemberViewController: UIViewController {
     
     @objc func textFieldDidChange() {
         
-        guard let name = nameText.text, !name.isEmpty, let github = githubText.text, !github.isEmpty, let position = positionText.text, !position.isEmpty, let years = yearsText.text, !years.isEmpty else {
+        guard let name = nameText.text, !name.isEmpty,
+              let github = githubText.text, !github.isEmpty,
+              let position = positionText.text, !position.isEmpty,
+              let years = yearsText.text, !years.isEmpty
+        else {
             addButtonOutlet.isEnabled = false
             return
         }
@@ -76,7 +82,7 @@ class AddNewMemberViewController: UIViewController {
         }
         
         guard let githubUser = githubText.text, !githubUser.isEmpty else {
-            showAlert(title: "Error", message: "Please enter GitHub username.")
+            showAlert(title: "Error", message: "Please enter GitHub Username.")
             return
         }
         
@@ -99,27 +105,20 @@ class AddNewMemberViewController: UIViewController {
                 
                 if result.login.lowercased() == githubUser.lowercased() {
                     DispatchQueue.main.async {
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        let context = appDelegate.persistentContainer.viewContext
                         
-                        let newMembers = NSEntityDescription.insertNewObject(forEntityName: "Members", into: context)
-                        let newHipo = NSEntityDescription.insertNewObject(forEntityName: "Hipo", into: context)
+                        let addMember = Members(context: self.context)
+                        addMember.name = self.nameText.text
+                        addMember.github = self.githubText.text
                         
-                        newMembers.setValue(self.githubText.text, forKey: "github")
-                        newHipo.setValue(self.positionText.text, forKey: "position")
-                        
-                        if let years = Int(self.yearsText.text!) {
-                            newHipo.setValue(years, forKey: "years")
+                        let addHipo = Hipo(context: self.context)
+                        addHipo.position = self.positionText.text
+
+                        if let yearsInt = Int32(self.yearsText.text!) {
+                            addHipo.years = yearsInt
                         }
                         
-                        do {
-                            try context.save()
-                            
-                        } catch {
-                            print("error")
-                        }
+                        appDelegate.saveContext()
                         
-                        NotificationCenter.default.post(name: NSNotification.Name("newData"), object: nil)
                         self.dismiss(animated: true, completion: nil)
                     }
                     
@@ -149,5 +148,6 @@ class AddNewMemberViewController: UIViewController {
     struct MyResponse: Codable {
         let login: String
     }
+    
     
 }
