@@ -240,7 +240,7 @@
                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="sortMembersButton:" destination="dUt-kS-hAT" eventType="touchUpInside" id="PMH-Qy-N7T"/>
+                                    <action selector="sortMembersButton:" destination="dUt-kS-hAT" eventType="touchUpInside" id="0F0-9p-ISf"/>
                                 </connections>
                             </button>
                             <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="8yq-Ia-FWy">
@@ -350,6 +350,7 @@
                         <outlet property="searchBar" destination="8yq-Ia-FWy" id="hMc-SL-GWK"/>
                         <segue destination="Ia8-Yg-S9X" kind="show" identifier="toSecondVC" id="Gpm-mT-efm"/>
                         <segue destination="RNY-0j-ub0" kind="presentation" identifier="toEditVC" modalPresentationStyle="fullScreen" id="Oek-oq-y2J"/>
+                        <segue destination="e8V-gJ-pib" kind="presentation" identifier="toSortVC" id="Uq8-4v-A9J"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NL7-uP-8iF" sceneMemberID="firstResponder"/>
@@ -575,7 +576,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nbi-X3-DUE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1372" y="706"/>
+            <point key="canvasLocation" x="1549" y="706"/>
         </scene>
         <!--Edit Member View Controller-->
         <scene sceneID="j6n-bn-nan">
@@ -778,7 +779,91 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VTc-Ai-8C3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="454" y="706"/>
+            <point key="canvasLocation" x="850" y="706"/>
+        </scene>
+        <!--Sort Member View Controller-->
+        <scene sceneID="Zsq-vf-nzm">
+            <objects>
+                <viewController storyboardIdentifier="SortMemberViewController" id="e8V-gJ-pib" customClass="SortMemberViewController" customModule="HipoLabsIOSAssignment" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Cl0-NS-Uwf">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Yi-Pt-XRW">
+                                <rect key="frame" x="45" y="758" width="303" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="tr1-PF-ZBa"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="BACK" cornerStyle="capsule">
+                                    <backgroundConfiguration key="background">
+                                        <color key="backgroundColor" systemColor="systemRedColor"/>
+                                    </backgroundConfiguration>
+                                    <fontDescription key="titleFontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
+                                    <color key="baseForegroundColor" systemColor="labelColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="backButton:" destination="e8V-gJ-pib" eventType="touchUpInside" id="OhM-7X-S3s"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort Member" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e43-Fy-PaY">
+                                <rect key="frame" x="15.999999999999986" y="103" width="235.66666666666663" height="47.666666666666657"/>
+                                <fontDescription key="fontDescription" name="Charter-Bold" family="Charter" pointSize="39"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="66" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Xjq-lU-2md">
+                                <rect key="frame" x="0.0" y="195.66666666666669" width="393" height="562.33333333333326"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="sortMemberCell" id="GRb-qc-OIA" customClass="SortMemberTableViewCell" customModule="HipoLabsIOSAssignment" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="66"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GRb-qc-OIA" id="7V4-yT-kKZ">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="66"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eU1-uu-FI3">
+                                                    <rect key="frame" x="16" y="7" width="361" height="52"/>
+                                                    <color key="backgroundColor" red="0.98039215690000003" green="0.98431372549999996" blue="0.98823529409999999" alpha="0.1459468129" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="eU1-uu-FI3" firstAttribute="leading" secondItem="7V4-yT-kKZ" secondAttribute="leading" constant="16" id="RXn-Vk-OT7"/>
+                                                <constraint firstAttribute="bottom" secondItem="eU1-uu-FI3" secondAttribute="bottom" constant="7" id="VLE-hc-hq8"/>
+                                                <constraint firstItem="eU1-uu-FI3" firstAttribute="top" secondItem="7V4-yT-kKZ" secondAttribute="top" constant="7" id="Yd1-hh-xll"/>
+                                                <constraint firstAttribute="trailing" secondItem="eU1-uu-FI3" secondAttribute="trailing" constant="16" id="wkR-3K-zL7"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="view" destination="eU1-uu-FI3" id="stz-wP-OgD"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Fpd-9t-ljC"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Xjq-lU-2md" firstAttribute="top" secondItem="e43-Fy-PaY" secondAttribute="bottom" constant="45" id="4Os-cj-1t9"/>
+                            <constraint firstItem="Xjq-lU-2md" firstAttribute="leading" secondItem="Cl0-NS-Uwf" secondAttribute="leading" id="CrA-q9-gen"/>
+                            <constraint firstItem="e43-Fy-PaY" firstAttribute="top" secondItem="Fpd-9t-ljC" secondAttribute="top" constant="103" id="DbL-Wd-PdU"/>
+                            <constraint firstItem="Fpd-9t-ljC" firstAttribute="bottom" secondItem="6Yi-Pt-XRW" secondAttribute="bottom" constant="34" id="Iti-Vb-gap"/>
+                            <constraint firstItem="6Yi-Pt-XRW" firstAttribute="top" secondItem="Xjq-lU-2md" secondAttribute="bottom" id="NWR-iw-z3f"/>
+                            <constraint firstItem="Fpd-9t-ljC" firstAttribute="trailing" secondItem="Xjq-lU-2md" secondAttribute="trailing" id="fbH-uv-tnY"/>
+                            <constraint firstItem="e43-Fy-PaY" firstAttribute="leading" secondItem="Fpd-9t-ljC" secondAttribute="leading" constant="16" id="ke0-zH-QUw"/>
+                            <constraint firstItem="Fpd-9t-ljC" firstAttribute="trailing" secondItem="6Yi-Pt-XRW" secondAttribute="trailing" constant="45" id="nwj-2O-3Gk"/>
+                            <constraint firstItem="6Yi-Pt-XRW" firstAttribute="leading" secondItem="Fpd-9t-ljC" secondAttribute="leading" constant="45" id="uMR-Ch-wwm"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="gAn-6F-S8Y"/>
+                    <connections>
+                        <outlet property="sortMembersTableView" destination="Xjq-lU-2md" id="3vB-C7-S42"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Svi-4y-yjK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="135" y="706"/>
         </scene>
     </scenes>
     <resources>

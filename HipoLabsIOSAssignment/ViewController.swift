@@ -23,6 +23,9 @@ class ViewController: UIViewController {
     var isSearching = false
     var textSearch: String?
     
+    var memberName = [String]()
+    var sortedFullName = [String]()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +45,8 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
+        memberName.removeAll()
+        
         if isSearching {
             searchContent(text: textSearch!)
         }else{
@@ -49,25 +54,34 @@ class ViewController: UIViewController {
         }
         
         membersTableView.reloadData()
-        
-                let fetchRequest = NSFetchRequest<Members>(entityName: "Members")
-        
-                do {
-                    let company = try context.fetch(fetchRequest)
-                    for person in company {
-                        print("Name: \(person.hipo?.position)")
-                    }
-                    
-                } catch let error as NSError {
-                    print("Could not fetch. \(error), \(error.userInfo)")
-                }
     }
     
     func getMembersData() {
+        
         do {
             memberList = try context.fetch(Members.fetchRequest())
+            
         } catch {
             print(error)
+        }
+    }
+    
+    func memberNameData() {
+        
+        let fetchRequest = NSFetchRequest<Members>(entityName: "Members")
+        
+        do {
+            let results = try context.fetch(fetchRequest)
+            
+            for result in results as [NSManagedObject] {
+                
+                if let name = result.value(forKey: "name") as? String {
+                    self.memberName.append(name)
+                }
+            }
+            
+        } catch {
+            print("error")
         }
     }
     
@@ -146,6 +160,42 @@ class ViewController: UIViewController {
         } catch {
             print("Error fetching results: \(error)")
         }
+    }
+    
+    func countCharacterOccurrences(in strings: [String], character: Character) -> Int {
+        var count = 0
+        for str in strings {
+            count += str.countOccurrences(of: character)
+        }
+        return count
+    }
+    
+    func sortByCharacterOccurrencesInLastNames(for character: Character) -> [String] {
+        let lastNames = memberName.map { $0.components(separatedBy: " ").last! }
+        let sortedLastNames = lastNames.sorted(by: {
+            if $0.countOccurrences(of: character) == $1.countOccurrences(of: character) {
+                if $0.count == $1.count {
+                    return $0.localizedCaseInsensitiveCompare($1) == .orderedAscending
+                } else {
+                    return $0.count < $1.count
+                }
+            } else {
+                return $0.countOccurrences(of: character) > $1.countOccurrences(of: character)
+            }
+        })
+        return sortedLastNames
+    }
+    
+    @IBAction func sortMembersButton(_ sender: Any) {
+        memberNameData()
+        let character: Character = "a"
+        let sortedLastNames = sortByCharacterOccurrencesInLastNames(for: character)
+        var sortedFullName = memberName.sorted(by: { sortedLastNames.firstIndex(of: $0.components(separatedBy: " ").last!)! < sortedLastNames.firstIndex(of: $1.components(separatedBy: " ").last!)! })
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let sortMemberVC = storyboard.instantiateViewController(withIdentifier: "SortMemberViewController") as? SortMemberViewController
+        sortMemberVC?.sortedFullName = sortedFullName
+        self.present(sortMemberVC!, animated: true, completion: nil)
     }
     
 //    @IBAction func addNewMemberButton(_ sender: Any) {
@@ -263,6 +313,20 @@ extension ViewController: UISearchBarDelegate {
         } else {
             return
         }
+    }
+    
+}
+
+
+extension String {
+    func countOccurrences(of character: Character) -> Int {
+        var count = 0
+        for char in self {
+            if char == character {
+                count += 1
+            }
+        }
+        return count
     }
     
 }
