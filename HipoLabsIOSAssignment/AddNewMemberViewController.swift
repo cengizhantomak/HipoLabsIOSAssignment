@@ -111,12 +111,13 @@ class AddNewMemberViewController: UIViewController {
                         addMember.github = self.githubText.text
                         
                         let addHipo = Hipo(context: self.context)
+                        addMember.hipo = addHipo
                         addHipo.position = self.positionText.text
-
-                        if let yearsInt = Int32(self.yearsText.text!) {
-                            addHipo.years = yearsInt
+                        if let years = Int32(self.yearsText.text!) {
+                            addHipo.years = years
+                            
                         }
-                        
+
                         appDelegate.saveContext()
                         
                         self.dismiss(animated: true, completion: nil)

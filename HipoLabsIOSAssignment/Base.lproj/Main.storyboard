@@ -569,8 +569,8 @@
                         <outlet property="githubView" destination="7ew-P3-nHJ" id="qpL-HQ-hGY"/>
                         <outlet property="nameText" destination="okx-Wl-tf7" id="RdK-C5-Xf9"/>
                         <outlet property="nameView" destination="bAI-qi-7Ts" id="NzQ-cP-VsS"/>
-                        <outlet property="positionText" destination="mKo-Hq-uMa" id="n6t-2S-wuM"/>
-                        <outlet property="yearsText" destination="bM4-j8-WRq" id="stS-DM-4vq"/>
+                        <outlet property="positionText" destination="mKo-Hq-uMa" id="KGM-IX-u9c"/>
+                        <outlet property="yearsText" destination="bM4-j8-WRq" id="NLL-SU-B7d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nbi-X3-DUE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

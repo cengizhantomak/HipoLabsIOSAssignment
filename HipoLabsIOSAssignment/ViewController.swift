@@ -48,12 +48,22 @@ class ViewController: UIViewController {
             getMembersData()
         }
         membersTableView.reloadData()
+        
+                let fetchRequest = NSFetchRequest<Members>(entityName: "Members")
+        
+                do {
+                    let company = try context.fetch(fetchRequest)
+                    for person in company {
+                        print("Name: \(person.hipo?.position)")
+                    }
+                } catch let error as NSError {
+                    print("Could not fetch. \(error), \(error.userInfo)")
+                }
     }
     
     func getMembersData() {
         do {
             memberList = try context.fetch(Members.fetchRequest())
-            hipoList = try context.fetch(Hipo.fetchRequest())
         } catch {
             print(error)
         }
@@ -84,19 +94,23 @@ class ViewController: UIViewController {
         let json = try? JSONSerialization.jsonObject(with: data, options: [])
         
         guard let dictionary = json as? [String: Any],
-              let members = dictionary["members"] as? [[String: Any]],
-              let appDelegate = UIApplication.shared.delegate as? AppDelegate
+              let members = dictionary["members"] as? [[String: Any]]
         else {
             return
         }
         
-        let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<Members> = Members.fetchRequest()
         
         do {
-            let memberData = try managedContext.fetch(fetchRequest)
+            let memberData = try context.fetch(fetchRequest)
             
             if memberData.count == 0 {
+                
+                let newCompany = Team(context: context)
+                    newCompany.company = dictionary["company"] as? String
+                    newCompany.team = dictionary["team"] as? String
+
+                print("comp: \(newCompany.company ?? "")")
                 
                 for member in members {
                     guard let name = member["name"] as? String,
@@ -109,17 +123,18 @@ class ViewController: UIViewController {
                         continue
                     }
                     
-                    let teamMember = Members(context: managedContext)
+                    let teamMember = Members(context: context)
                     teamMember.name = name
                     teamMember.github = github
                     
-                    let teamHipo = Hipo(context: managedContext)
+                    let teamHipo = Hipo(context: context)
+                    teamMember.hipo = teamHipo
                     teamHipo.position = position
                     teamHipo.years = Int32(yearsInHipo)
                 }
                 
                 do {
-                    try managedContext.save()
+                    try context.save()
                     
                 } catch {
                     print("Error saving context: \(error)")
@@ -151,13 +166,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let member = memberList[indexPath.row]
-        let hipo = hipoList[indexPath.row]
         
         let cell = membersTableView.dequeueReusableCell(withIdentifier: "memberCell") as! MembersTableViewCell
         
         cell.nameLabel.text = member.name
-        cell.positionLabel.text = hipo.position
-        cell.yearsLabel.text = String(",  \(hipo.years) years")
+        cell.positionLabel.text = member.hipo?.position
+        cell.yearsLabel.text = String(",  \(member.hipo!.years) years")
         
         cell.view.layer.cornerRadius = 8
         cell.view.layer.borderWidth = 1
@@ -176,11 +190,18 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             
             let member = self.memberList[indexPath.row]
             self.context.delete(member)
-            let hipo = self.hipoList[indexPath.row]
-            self.context.delete(hipo)
+//            let hipo = self.hipoList[indexPath.row]
+//            self.context.delete(hipo)
             appDelegate.saveContext()
             
             self.getMembersData()
+            
+            if self.isSearching {
+                self.searchContent(text: self.textSearch!)
+
+            }else{
+                self.getMembersData()
+            }
             
             self.membersTableView.reloadData()
         }

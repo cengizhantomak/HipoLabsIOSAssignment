@@ -24,8 +24,6 @@ class EditMemberViewController: UIViewController {
     let context = appDelegate.persistentContainer.viewContext
     
     var member: Members?
-    var hipo: Hipo?
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,11 +46,14 @@ class EditMemberViewController: UIViewController {
         if let m = member {
             nameText.text = m.name
             githubText.text = m.github
-        }
-        
-        if let h = hipo {
-            positionText.text = h.position
-            yearsText.text = String(h.years)
+            positionText.text = m.hipo?.position
+            
+            if let years = m.hipo?.years {
+                yearsText.text = String(years)
+            } else {
+                yearsText.text = ""
+            }
+
         }
         
         nameText.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -88,10 +89,10 @@ class EditMemberViewController: UIViewController {
     @IBAction func addButton(_ sender: Any) {
         self.member!.name = self.nameText.text
         self.member!.github = self.githubText.text
+        self.member!.hipo?.position = self.positionText.text
         
-        self.hipo!.position = self.positionText.text
         if let yearsInt = Int32(self.yearsText.text!) {
-            self.member!.hipo!.years = yearsInt
+            self.member!.hipo?.years = yearsInt
         }
         
         appDelegate.saveContext()
