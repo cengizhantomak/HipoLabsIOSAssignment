@@ -20,7 +20,6 @@ class ViewController: UIViewController {
     var memberList = [Members]()
     var hipoList = [Hipo]()
     
-    var filteredData: [String] = []
     var isSearching = false
     var textSearch: String?
     
@@ -42,11 +41,13 @@ class ViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         if isSearching {
             searchContent(text: textSearch!)
         }else{
             getMembersData()
         }
+        
         membersTableView.reloadData()
         
                 let fetchRequest = NSFetchRequest<Members>(entityName: "Members")
@@ -56,6 +57,7 @@ class ViewController: UIViewController {
                     for person in company {
                         print("Name: \(person.hipo?.position)")
                     }
+                    
                 } catch let error as NSError {
                     print("Could not fetch. \(error), \(error.userInfo)")
                 }
@@ -157,9 +159,6 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isSearching {
-            return filteredData.count
-        }
         return memberList.count
     }
     
@@ -190,12 +189,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             
             let member = self.memberList[indexPath.row]
             self.context.delete(member)
-//            let hipo = self.hipoList[indexPath.row]
-//            self.context.delete(hipo)
             appDelegate.saveContext()
-            
-            self.getMembersData()
-            
+                        
             if self.isSearching {
                 self.searchContent(text: self.textSearch!)
 
@@ -214,7 +209,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
     
-    
 }
 
 
@@ -227,11 +221,13 @@ extension ViewController: UISearchBarDelegate {
         
         if searchText.isEmpty {
                 isSearching = false
-                membersTableView.reloadData()
+                getMembersData()
             } else {
                 isSearching = true
                 searchContent(text: textSearch!)
             }
+        
+        membersTableView.reloadData()
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -243,29 +239,25 @@ extension ViewController: UISearchBarDelegate {
     }
     
     func searchContent(text: String) {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult>
+        
         if searchBar.selectedScopeButtonIndex == 0 {
-            fetchRequest = NSFetchRequest(entityName: "Members")
-            fetchRequest.predicate = NSPredicate(format: "name contains[c] %@", text)
+            let fetchRequest: NSFetchRequest<Members> = Members.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "name CONTAINS[cd] %@", text)
             
             do {
-                let results = try context.fetch(fetchRequest) as! [NSManagedObject]
-                filteredData = results.map({ $0.value(forKey: "name") as! String })
-                membersTableView.reloadData()
-            } catch let error as NSError {
-                print("Could not fetch data. \(error), \(error.userInfo)")
+                memberList = try context.fetch(fetchRequest)
+            } catch let error {
+                print("Error: \(error.localizedDescription)")
             }
             
         } else if searchBar.selectedScopeButtonIndex == 1 {
-            fetchRequest = NSFetchRequest(entityName: "Hipo")
-            fetchRequest.predicate = NSPredicate(format: "position contains[c] %@", text)
+            let fetchRequest: NSFetchRequest<Members> = Members.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "hipo.position CONTAINS[cd] %@", text)
             
             do {
-                let results = try context.fetch(fetchRequest) as! [NSManagedObject]
-                filteredData = results.map({ $0.value(forKey: "position") as! String })
-                membersTableView.reloadData()
-            } catch let error as NSError {
-                print("Could not fetch data. \(error), \(error.userInfo)")
+                memberList = try context.fetch(fetchRequest)
+            } catch let error {
+                print("Error: \(error.localizedDescription)")
             }
             
         } else {
