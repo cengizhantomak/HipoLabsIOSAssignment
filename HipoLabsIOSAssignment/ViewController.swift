@@ -34,6 +34,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        refreshControl.addTarget(self, action: #selector(refreshList(_:)), for: .valueChanged)
+        membersTableView.refreshControl = refreshControl
+        
         membersTableView.delegate = self
         membersTableView.dataSource = self
         membersTableView.separatorStyle = .none
