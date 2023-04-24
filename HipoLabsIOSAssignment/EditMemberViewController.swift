@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import CoreData
+import SystemConfiguration
 
 class EditMemberViewController: UIViewController {
     
@@ -19,7 +21,7 @@ class EditMemberViewController: UIViewController {
     @IBOutlet weak var positionText: UITextField!
     @IBOutlet weak var yearsText: UITextField!
     
-    @IBOutlet weak var addButtonOutlet: UIButton!
+    @IBOutlet weak var editButtonOutlet: UIButton!
     
     let context = appDelegate.persistentContainer.viewContext
     
@@ -53,7 +55,6 @@ class EditMemberViewController: UIViewController {
             } else {
                 yearsText.text = ""
             }
-
         }
         
         nameText.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -61,10 +62,24 @@ class EditMemberViewController: UIViewController {
         positionText.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         yearsText.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
-        addButtonOutlet.isEnabled = false
+        editButtonOutlet.isEnabled = false
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(gestureRecognizer)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if isInternetAvailable() {
+            
+        } else {
+            editButtonOutlet.isEnabled = false
+        }
+        
+        if !isInternetAvailable() {
+            let alert = UIAlertController(title: "Warning", message: "No internet connection.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc func hideKeyboard() {
@@ -76,17 +91,42 @@ class EditMemberViewController: UIViewController {
               let github = githubText.text, !github.isEmpty,
               let position = positionText.text, !position.isEmpty,
               let years = yearsText.text, !years.isEmpty else {
-            addButtonOutlet.isEnabled = false
+            editButtonOutlet.isEnabled = false
             return
         }
-        addButtonOutlet.isEnabled = true
+        
+        if isInternetAvailable() {
+            editButtonOutlet.isEnabled = true
+        } else {
+            editButtonOutlet.isEnabled = false
+        }
+    }
+    
+    func isInternetAvailable() -> Bool {
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                SCNetworkReachabilityCreateWithAddress(nil, $0)
+            }
+        }) else {
+            return false
+        }
+        var flags: SCNetworkReachabilityFlags = []
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+            return false
+        }
+        let isReachable = flags.contains(.reachable)
+        let needsConnection = flags.contains(.connectionRequired)
+        return (isReachable && !needsConnection)
     }
     
     @IBAction func backButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func addButton(_ sender: Any) {
+    @IBAction func editButton(_ sender: Any) {
         self.member!.name = self.nameText.text
         self.member!.github = self.githubText.text
         self.member!.hipo?.position = self.positionText.text

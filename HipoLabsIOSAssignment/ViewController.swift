@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import SystemConfiguration
 
 let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
@@ -14,6 +15,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var membersTableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var addMemberButton: UIButton!
     
     let context = appDelegate.persistentContainer.viewContext
     
@@ -25,6 +27,8 @@ class ViewController: UIViewController {
     
     var memberName = [String]()
     var sortedFullName = [String]()
+    
+    let refreshControl = UIRefreshControl()
     
     
     override func viewDidLoad() {
@@ -44,9 +48,7 @@ class ViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        memberName.removeAll()
-        
+                
         if isSearching {
             searchContent(text: textSearch!)
         }else{
@@ -54,6 +56,29 @@ class ViewController: UIViewController {
         }
         
         membersTableView.reloadData()
+        
+        if isInternetAvailable() {
+            
+            addMemberButton.isEnabled = true
+            
+        } else {
+            addMemberButton.isEnabled = false
+        }
+        
+        if !isInternetAvailable() {
+            let alert = UIAlertController(title: "Warning", message: "No internet connection.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc private func refreshList(_ sender: Any) {
+        
+        if isInternetAvailable() {
+            addMemberButton.isEnabled = true
+        }
+        
+        refreshControl.endRefreshing()
     }
     
     func getMembersData() {
@@ -63,25 +88,6 @@ class ViewController: UIViewController {
             
         } catch {
             print(error)
-        }
-    }
-    
-    func memberNameData() {
-        
-        let fetchRequest = NSFetchRequest<Members>(entityName: "Members")
-        
-        do {
-            let results = try context.fetch(fetchRequest)
-            
-            for result in results as [NSManagedObject] {
-                
-                if let name = result.value(forKey: "name") as? String {
-                    self.memberName.append(name)
-                }
-            }
-            
-        } catch {
-            print("error")
         }
     }
     
@@ -161,6 +167,46 @@ class ViewController: UIViewController {
             print("Error fetching results: \(error)")
         }
     }
+    
+    func isInternetAvailable() -> Bool {
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                SCNetworkReachabilityCreateWithAddress(nil, $0)
+            }
+        }) else {
+            return false
+        }
+        var flags: SCNetworkReachabilityFlags = []
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+            return false
+        }
+        let isReachable = flags.contains(.reachable)
+        let needsConnection = flags.contains(.connectionRequired)
+        return (isReachable && !needsConnection)
+    }
+    
+    func memberNameData() {
+        memberName.removeAll()
+        let fetchRequest = NSFetchRequest<Members>(entityName: "Members")
+        
+        do {
+            let results = try context.fetch(fetchRequest)
+            
+            for result in results as [NSManagedObject] {
+                
+                if let name = result.value(forKey: "name") as? String {
+                    self.memberName.append(name)
+                }
+            }
+            
+        } catch {
+            print("error")
+        }
+    }
+    
     
     func countCharacterOccurrences(in strings: [String], character: Character) -> Int {
         var count = 0

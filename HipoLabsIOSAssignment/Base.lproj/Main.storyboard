@@ -37,7 +37,7 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="999" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68W-ws-xNQ">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68W-ws-xNQ">
                                         <rect key="frame" x="96" y="135" width="67" height="15"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="15" id="RFO-la-ob0"/>
@@ -47,7 +47,7 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="999" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vPj-9l-5E0">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vPj-9l-5E0">
                                         <rect key="frame" x="230" y="135" width="67" height="15"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="15" id="Ig6-y4-qTN"/>
@@ -346,11 +346,12 @@
                     </view>
                     <navigationItem key="navigationItem" title="Members" id="YLh-Kz-sw5"/>
                     <connections>
+                        <outlet property="addMemberButton" destination="Yxx-D3-c0b" id="Aid-e9-JMb"/>
                         <outlet property="membersTableView" destination="Hbr-SP-p9n" id="nPU-rQ-wO6"/>
                         <outlet property="searchBar" destination="8yq-Ia-FWy" id="hMc-SL-GWK"/>
                         <segue destination="Ia8-Yg-S9X" kind="show" identifier="toSecondVC" id="Gpm-mT-efm"/>
                         <segue destination="RNY-0j-ub0" kind="presentation" identifier="toEditVC" modalPresentationStyle="fullScreen" id="Oek-oq-y2J"/>
-                        <segue destination="e8V-gJ-pib" kind="presentation" identifier="toSortVC" id="Uq8-4v-A9J"/>
+                        <segue destination="e8V-gJ-pib" kind="presentation" identifier="toSortVC" modalPresentationStyle="fullScreen" id="Uq8-4v-A9J"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NL7-uP-8iF" sceneMemberID="firstResponder"/>
@@ -509,7 +510,7 @@
                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="addButton:" destination="xsJ-Gz-J1f" eventType="touchUpInside" id="beq-Pc-eaR"/>
+                                    <action selector="addButton:" destination="xsJ-Gz-J1f" eventType="touchUpInside" id="3AB-r9-Sv9"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xDc-ab-RRM">
@@ -565,7 +566,7 @@
                     <connections>
                         <outlet property="PositionView" destination="OQx-Ge-Ca1" id="BIC-Wz-dWo"/>
                         <outlet property="YearsView" destination="Q5r-aB-ObB" id="K0b-Ln-TnY"/>
-                        <outlet property="addButtonOutlet" destination="5Ky-iG-vc2" id="IJx-wB-1FF"/>
+                        <outlet property="addButtonOutlet" destination="5Ky-iG-vc2" id="tHG-0W-Yhe"/>
                         <outlet property="githubText" destination="Npr-wU-8IM" id="zvQ-ST-HXV"/>
                         <outlet property="githubView" destination="7ew-P3-nHJ" id="qpL-HQ-hGY"/>
                         <outlet property="nameText" destination="okx-Wl-tf7" id="RdK-C5-Xf9"/>
@@ -712,7 +713,7 @@
                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="addButton:" destination="RNY-0j-ub0" eventType="touchUpInside" id="jXq-mm-yA4"/>
+                                    <action selector="editButton:" destination="RNY-0j-ub0" eventType="touchUpInside" id="h5k-Zh-hw7"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y2a-mh-V37">
@@ -768,7 +769,7 @@
                     <connections>
                         <outlet property="PositionView" destination="U7R-d6-qTi" id="OQj-dE-xOv"/>
                         <outlet property="YearsView" destination="q3r-MM-g2T" id="aJW-iJ-G4B"/>
-                        <outlet property="addButtonOutlet" destination="21g-d5-KWZ" id="a4W-gt-IaI"/>
+                        <outlet property="editButtonOutlet" destination="21g-d5-KWZ" id="eTc-sN-wMo"/>
                         <outlet property="githubText" destination="sW9-zu-DDD" id="MBd-2Q-gWq"/>
                         <outlet property="githubView" destination="HoI-dS-y29" id="Wae-aB-Taf"/>
                         <outlet property="nameText" destination="5Lj-m9-dla" id="zCK-iu-NHC"/>
@@ -786,11 +787,11 @@
             <objects>
                 <viewController storyboardIdentifier="SortMemberViewController" id="e8V-gJ-pib" customClass="SortMemberViewController" customModule="HipoLabsIOSAssignment" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Cl0-NS-Uwf">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Yi-Pt-XRW">
-                                <rect key="frame" x="45" y="758" width="303" height="50"/>
+                                <rect key="frame" x="45" y="768" width="303" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="tr1-PF-ZBa"/>
                                 </constraints>
@@ -813,7 +814,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="66" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Xjq-lU-2md">
-                                <rect key="frame" x="0.0" y="195.66666666666669" width="393" height="562.33333333333326"/>
+                                <rect key="frame" x="0.0" y="195.66666666666669" width="393" height="572.33333333333326"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="sortMemberCell" id="GRb-qc-OIA" customClass="SortMemberTableViewCell" customModule="HipoLabsIOSAssignment" customModuleProvider="target">
